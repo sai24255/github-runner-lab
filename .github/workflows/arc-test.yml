@@ -5,27 +5,21 @@ on:
 
 jobs:
   test:
+    strategy:
+      matrix:
+        job: [1, 2, 3]
+
     runs-on: arc-runner-set
 
     steps:
-      - name: Show runner information
+      - name: Show runner
         run: |
-          echo "================================="
-          echo "Running on ARC self-hosted runner"
-          echo "================================="
-          echo "Hostname:"
-          hostname
+          echo "Job: ${{ matrix.job }}"
+          echo "Runner: $RUNNER_NAME"
+          echo "Hostname: $(hostname)"
 
-          echo "OS:"
-          uname -a
-
-          echo "Runner:"
-          echo "$RUNNER_NAME"
-
-      - name: Keep runner busy
-        run: |
-          echo "Sleeping for 60 seconds..."
-          sleep 60
+      - name: Wait
+        run: sleep 60
 
       - name: Finished
-        run: echo "ARC runner job completed successfully!"
+        run: echo "Job ${{ matrix.job }} completed"
